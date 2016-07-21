@@ -248,6 +248,21 @@ def intent(*intent_list):
     return add_attribute
 
 
+def limit(limit=1, period=0):
+    """Decorate a function to limit the number of times it can be triggered 
+    in a period time (seconds). Limit allows a maximum amount of calls to be
+    run to help conform to API usage limits.
+
+    Rate-limited functions that use scheduled future commands should import
+    threading.Timer() instead of sched, or rate limiting will not work properly.
+    """
+    def add_attribute(function):
+        function.limit = limit
+        function.limit_period = period
+        return function
+    return add_attribute
+
+
 def rate(user=0, channel=0, server=0):
     """Decorate a function to limit how often it can be triggered on a per-user
     basis, in a channel, or across the server (bot). A value of zero means no 
